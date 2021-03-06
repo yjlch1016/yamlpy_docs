@@ -11,9 +11,11 @@ https://github.com/yjlch1016/yamlpy
 
 yamlpy即为yaml文件+pytest单元测试框架的缩写  
 可看作是一个脚手架工具  
-可快速生成项目的各个目录与文件  
-只需维护一份或者多份yaml文件即可   
-（或者json文件） 
+可快速生成项目的各个目录与文件   
+支持MySQL、PgSQL与MongoDB等数据库的增删改查  
+支持Jenkins、Docker等CI/CD工具  
+支持飞书、钉钉、企业微信等机器人  
+只需维护一份或者多份yaml（或者json）文件即可  
 
 与[yamlapi接口测试框架](https://github.com/yjlch1016/yamlapi)对比，  
 整体结构仍然保持不变，  
@@ -56,33 +58,34 @@ yaml文件（或者json文件）格式仍然保持不变，
 
 ***
 # 一、思路         
-1、采用requests+PyMySQL+DBUtils+psycopg2-binary+pymongo+demjson+loguru+
+1、采用requests+PyMySQL+DBUtils+psycopg2-binary+pymongo+influxdb+demjson+loguru+
 PyYAML+ruamel.yaml+pytest+pytest-html+allure-pytest+pytest-reportlog+pytest-assume+pytest-rerunfailures+pytest-instafail+pytest-sugar+pytest-timeout+pytest-parallel+tablib  
 2、requests是发起HTTP请求的第三方库  
 3、PyMySQL是连接MySQL的第三方库  
 4、DBUtils是数据库连接池的第三方库  
 5、psycopg2-binary是连接PgSQL的第三方库  
 6、pymongo是连接Mongo的第三方库  
-7、demjson是解析非标格式json的第三方库  
-8、loguru是记录日志的第三方库  
-9、PyYAML与ruamel.yaml是读写yaml文件的第三方库  
-10、pytest是单元测试的第三方库  
-11、pytest-html是生成html测试报告的插件  
-12、allure-pytest是生成allure测试报告的插件  
-13、pytest-reportlog是替换--resultlog选项的插件  
-14、pytest-assume是多重断言的插件  
-15、pytest-rerunfailures是失败重跑的插件  
-16、pytest-instafail是实时显示错误信息的插件  
-17、pytest-sugar是显示进度的插件  
-18、pytest-timeout是设置超时时间的插件  
-19、pytest-parallel是多线程的插件  
-20、tablib是导出多种格式数据的第三方库  
+7、influxdb是连接influxDB的第三方库  
+8、demjson是解析非标格式json的第三方库  
+9、loguru是记录日志的第三方库  
+10、PyYAML与ruamel.yaml是读写yaml文件的第三方库  
+11、pytest是单元测试的第三方库  
+12、pytest-html是生成html测试报告的插件  
+13、allure-pytest是生成allure测试报告的插件  
+14、pytest-reportlog是替换--resultlog选项的插件  
+15、pytest-assume是多重断言的插件  
+16、pytest-rerunfailures是失败重跑的插件  
+17、pytest-instafail是实时显示错误信息的插件  
+18、pytest-sugar是显示进度的插件  
+19、pytest-timeout是设置超时时间的插件  
+20、pytest-parallel是多线程的插件  
+21、tablib是导出多种格式数据的第三方库  
 
 ***
 # 二、目录结构  
 1、case是测试用例包  
 2、report_log是测试报告和日志的目录  
-3、resource是yaml文件的目录  
+3、resource是yaml（或者json文件）文件的目录  
 4、setting是工程的配置文件包  
 5、tool是常用方法的封装包  
 6、.dockerignore是在传递给docker引擎时需要忽略掉的文件  
@@ -331,17 +334,20 @@ test_case.xlsx
 test_case.yaml  
 
 ***
-# 五、打包镜像  
-`docker pull registry.cn-hangzhou.aliyuncs.com/yangjianliang/yamlapi:0.0.7`  
-从阿里云镜像仓库拉取yamlapi镜像
+# 五、打包镜像，运行容器  
+docker pull registry.cn-hangzhou.aliyuncs.com/yangjianliang/yamlapi:0.0.8  
+从阿里云镜像仓库拉取yamlapi镜像  
 
-`docker build -t demo_image .`  
+docker build -t demo_image .  
 docker build -t 镜像名称 .  
-本地打包  
-demo_image为镜像名称，随便取  
+本地打包，demo_image为镜像名称，随便取  
 
-`docker run -e cmd="test" demo_image:latest`  
 docker run -e cmd="环境缩写" 镜像名称:latest  
-启动容器  
-前台运行  
--e cmd="test"向启动命令动态传递参数，环境缩写为test  
+docker run -e cmd="dev" demo_image:latest  
+开发环境  
+docker run -e cmd="test" demo_image:latest  
+测试环境  
+docker run -e cmd="pre" demo_image:latest  
+预生产环境  
+docker run -e cmd="formal" demo_image:latest  
+生产环境  

@@ -22,7 +22,7 @@ copyright = '2021, yangjianliang'
 author = 'yangjianliang'
 
 # The full version, including alpha/beta/rc tags
-release = '1.1.5'
+release = '1.1.8'
 
 # -- General configuration ---------------------------------------------------
 
